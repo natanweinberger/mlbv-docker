@@ -1,0 +1,29 @@
+LOCAL_DIRECTORY=~/Desktop
+OPTIONAL_ARGS=$@
+PLAYER=/Applications/VLC.app/Contents/MacOS/VLC
+
+function cleanup {
+    echo "Cleaning up..."
+    rm $LOCAL_DIRECTORY/*.ts
+    docker rm -f mlbtv
+}
+
+function wait_for_stream {
+    # Check if any .ts files exist in the target directory
+    while [ $(ls -1 $LOCAL_DIRECTORY/*.ts 2>/dev/null | wc -l) = 0 ]; do
+        echo "Waiting for stream..."
+        sleep 1
+        test $? -gt 128 && break  # Check to see if a SIGINT has been sent
+    done;
+}
+
+trap cleanup EXIT
+
+docker run --name mlbtv \
+-d --rm -v $(echo $LOCAL_DIRECTORY):/var/code \
+mlbv-docker mlbv --fetch --username=$MLBTV_USERNAME --password=$MLBTV_PASSWORD -t phi "$OPTIONAL_ARGS"
+
+# The container will take a few seconds to spin up and get the stream ready.
+wait_for_stream
+
+$PLAYER ~/Desktop/*.ts
