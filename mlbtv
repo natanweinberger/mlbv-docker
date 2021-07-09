@@ -20,8 +20,8 @@ function wait_for_stream {
 trap cleanup EXIT
 
 docker run --name mlbtv \
--d --rm -v $(echo $LOCAL_DIRECTORY):/var/code \
-mlbv-docker mlbv --fetch --username=$MLBTV_USERNAME --password=$MLBTV_PASSWORD -t phi "$OPTIONAL_ARGS"
+--rm -v $(echo $LOCAL_DIRECTORY):/var/code \
+mlbv-docker mlbv --fetch --username=$MLBTV_USERNAME --password=$MLBTV_PASSWORD -t phi $OPTIONAL_ARGS &
 
 # The container will take a few seconds to spin up and get the stream ready.
 wait_for_stream
