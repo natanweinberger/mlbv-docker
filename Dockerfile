@@ -6,4 +6,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
+ENV TZ America/New_York
+
 RUN mlbv --init

@@ -6,6 +6,7 @@ This package wraps the [mlbv](https://github.com/kmac/mlbv) package in Docker.
 
 - Install VLC
 - Set environment variables: `MLBTV_USERNAME` and `MLBTV_PASSWORD`
+- Set your preferred timezone in `Dockerfile` (default: `America/New_York`)
 
 ## Getting started
 
